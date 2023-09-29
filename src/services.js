@@ -1,47 +1,32 @@
-const header = new Headers();
-header.append('Content-Type', 'application/json'); 
-const urlApi = 'http://localhost:3001/api'
+import axios from 'axios'
 
-const services = {
-    blacklist:async (parms)=> {
-        const blackList = await fetch(`${urlApi}/blacklist`, {
-            method:"POST",
-            headers:header,
-            body:JSON.stringify(parms)
-        });
-        return await blackList.json()    
+const configApi = axios.create({
+    baseURL:'http://localhost:3001/api',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  
+  const services = {
+    blacklist: async (parms) => {
+      const resp = await  configApi.post('/blacklist', parms)
+      return resp.data
     },
     coberturas:async (parms)=> {
-        const coberturas = await fetch(`${urlApi}/coberturas`, {
-            method:"GET",
-            headers:header
-        });
-        return await coberturas.json()    
+      const resp =  await configApi.get('/coberturas', parms)
+      return resp.data
     },  
     cepRestritos:async (parms)=> {
-        const cepRestritos = await fetch(`${urlApi}/cepRestritos`, {
-            method:"POST",
-            headers:header,
-            body:JSON.stringify(parms)
-        });
-        return await cepRestritos.json()  
-        
+      const resp =  await configApi.post('/cepRestritos', parms) 
+      return resp.data
     },
     salvarCotacao:async (parms)=> {
-        const salvarCotacoes = await fetch(`${urlApi}/salvarCotacoes`, {
-            method:"POST",
-            headers:header,
-            body:JSON.stringify(parms)
-        });
-        return await salvarCotacoes.json()  
+      const resp =  await configApi.post('salvarCotacoes', parms)    
+      return resp.data
     },
     buscaCep:async (parms)=> {
-        const buscaCep = await fetch( `https://viacep.com.br/ws/${parms}/json/`, {
-            method:"GET",
-            headers:header
-        });
-        console.log(buscaCep)
-        return await buscaCep.json()    
+      const resp =  await configApi.get(`https://viacep.com.br/ws/${parms}/json/`)    
+      return resp.data
     }
     
 };
